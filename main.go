@@ -83,7 +83,7 @@ func (w multiWeatherProvider) temperature(city string) (float64, error) {
 type openWeatherMap struct{}
 
 func (w openWeatherMap) temperature(city string) (float64, error) {
-	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?q=" + city)
+	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=YOUR_API_KEY&q=" + city)
 	if err != nil {
 		return 0, err
 	}
