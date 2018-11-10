@@ -10,11 +10,12 @@ import (
 )
 
 func main() {
+	openWeatherMapAPIKey := flag.String("openweathermap.api.key", "0123456789abcdef", "openweathermap.org API key")
 	wundergroundAPIKey := flag.String("wunderground.api.key", "0123456789abcdef", "wunderground.com API key")
 	flag.Parse()
 
 	mw := multiWeatherProvider{
-		openWeatherMap{},
+		openWeatherMap{apiKey: *openWeatherMapAPIKey},
 		weatherUnderground{apiKey: *wundergroundAPIKey},
 	}
 
@@ -80,10 +81,12 @@ func (w multiWeatherProvider) temperature(city string) (float64, error) {
 	return sum / float64(len(w)), nil
 }
 
-type openWeatherMap struct{}
+type openWeatherMap struct {
+	apiKey string
+}
 
 func (w openWeatherMap) temperature(city string) (float64, error) {
-	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?q=" + city)
+	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=" + w.apiKey + "&q=" + city)
 	if err != nil {
 		return 0, err
 	}
